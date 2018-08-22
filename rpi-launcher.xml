@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node name="/">
+  <interface name="net.raspberry.RpiLauncher">
+    <method name="Load">
+      <arg type="s" name="url" direction="in" />
+    </method>
+    <method name="Stop">
+    </method>
+    <method name="Reload">
+    </method>
+    <method name="GetURL">
+      <arg type="s" name="url" direction="out" />
+    </method>
+
+    <signal name="LoadingStateChanged">
+      <arg type="b" name="loading" direction="out" />
+    </signal>
+    <signal name="LoadProgressed">
+      <arg type="d" name="progress" direction="out" />
+    </signal>
+    <signal name="URLChanged">
+      <arg type="s" name="url" direction="out" />
+    </signal>
+  </interface>
+</node>
