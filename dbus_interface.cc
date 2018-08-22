@@ -43,10 +43,7 @@ void DbusAdaptor::SetController(
   controller_ = controller;
 }
 
-DbusInterface::DbusInterface()
-  : bus_(DBus::Connection::SystemBus()),
-    adaptor_(bus_),
-    thread_(std::thread(ThreadTrampoline, this)) {
+DbusInterface::DbusInterface() {
 }
 
 DbusInterface::~DbusInterface() {
@@ -54,9 +51,12 @@ DbusInterface::~DbusInterface() {
 
 void DbusInterface::Initialise(
   EGLContent::BrowserDelegate::Controller* controller) {
-  adaptor_.SetController(controller);
+  DBus::Connection bus = DBus::Connection::SystemBus();
   DBus::default_dispatcher = &dispatcher_;
-  bus_.request_name("net.raspberry.RpiLauncher");
+  bus.request_name("net.raspberry.RpiLauncher");
+  adaptor_.reset(new DbusAdaptor(bus));
+  adaptor_->SetController(controller);
+  thread_ = std::thread(ThreadTrampoline, this);
 }
 
 void DbusInterface::Run() {
@@ -64,13 +64,13 @@ void DbusInterface::Run() {
 }
 
 void DbusInterface::LoadingStateChanged(bool loading) {
-  adaptor_.LoadingStateChanged(loading);
+  adaptor_->LoadingStateChanged(loading);
 }
 
 void DbusInterface::LoadProgressed(double progress) {
-  adaptor_.LoadProgressed(progress);
+  adaptor_->LoadProgressed(progress);
 }
 
 void DbusInterface::TargetURLChanged(std::string& url) {
-  adaptor_.URLChanged(url);
+  adaptor_->URLChanged(url);
 }

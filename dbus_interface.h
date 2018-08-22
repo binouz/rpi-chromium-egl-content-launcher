@@ -48,9 +48,9 @@ class DbusInterface {
 
   private:
 
-    DBus::Connection bus_;
+    ;
     DBus::BusDispatcher dispatcher_;
-    DbusAdaptor adaptor_;
+    std::unique_ptr<DbusAdaptor> adaptor_;
     std::thread thread_;
 };
 
