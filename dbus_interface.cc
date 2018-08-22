@@ -51,8 +51,8 @@ DbusInterface::~DbusInterface() {
 
 void DbusInterface::Initialise(
   EGLContent::BrowserDelegate::Controller* controller) {
-  DBus::Connection bus = DBus::Connection::SystemBus();
   DBus::default_dispatcher = &dispatcher_;
+  DBus::Connection bus = DBus::Connection::SystemBus();
   bus.request_name("net.raspberry.RpiLauncher");
   adaptor_.reset(new DbusAdaptor(bus));
   adaptor_->SetController(controller);
